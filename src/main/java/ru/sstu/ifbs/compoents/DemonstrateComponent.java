@@ -16,10 +16,13 @@ public class DemonstrateComponent {
     private String firstValue;
     @Value("${example2}")
     private String secondValue;
+    @Value("${example3}")
+    private String thirdValue;
 
     @PostConstruct
     public void init() {
         logger.log(Level.INFO, "firstValue: " + firstValue);
         logger.log(Level.INFO, "secondValue: " + secondValue);
+        logger.log(Level.INFO, "thirdValue: " + thirdValue);
     }
 }
