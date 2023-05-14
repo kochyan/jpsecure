@@ -15,7 +15,7 @@ public class CustomPropertyDecryptor implements PropertyDecryptor {
 
     @Override
     public Map.Entry<String, String> decryptProperty(Map.Entry<String, Object> encryptedPropertyEntry) {
-        return Map.entry(encryptedPropertyEntry.getKey(), encryptedPropertyEntry.getValue().toString());
+        return Map.entry(encryptedPropertyEntry.getKey(), encryptedPropertyEntry.getValue().toString().substring(6));
     }
 
     @Override

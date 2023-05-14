@@ -15,8 +15,8 @@ import static org.apache.logging.log4j.util.Strings.isBlank;
 import static org.apache.logging.log4j.util.Strings.isNotBlank;
 import static ru.sstu.ifbs.decrypt.util.DecryptConstants.*;
 
-public class DecryptPropertiesListener implements ApplicationListener<ApplicationEnvironmentPreparedEvent> {
-    private static final Logger logger = Logger.getLogger(DecryptPropertiesListener.class.getName());
+public class ApplicationPreparedEventListener implements ApplicationListener<ApplicationEnvironmentPreparedEvent> {
+    private static final Logger logger = Logger.getLogger(ApplicationPreparedEventListener.class.getName());
     private String secretKey = null;
     private String algorithm = null;
     private String decryptorClassname = null;

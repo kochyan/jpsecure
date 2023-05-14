@@ -27,7 +27,7 @@ public class DefaultPropertyDecryptor extends DefaultDecryptor implements Proper
             return null;
         }
         try {
-            final byte[] encryptedProperty = encryptedPropertyEntry.getValue().toString().substring(DECRYPT_MARKER.length()).getBytes();
+            final byte[] encryptedProperty = encryptedPropertyEntry.getValue().toString().substring(DECRYPT_MARKER.length()).getBytes(ISO_CHARSET);
             final byte[] decryptedProperty = decrypt(encryptedProperty, algorithm, secretKey.getBytes(ISO_CHARSET));
             return Map.entry(encryptedPropertyEntry.getKey(), new String(decryptedProperty, ISO_CHARSET));
         } catch (Exception e) {
@@ -44,7 +44,7 @@ public class DefaultPropertyDecryptor extends DefaultDecryptor implements Proper
             try {
                 return decryptProperty(encryptedProperty);
             } catch (Exception e) {
-                throw new RuntimeException("Got unexpected error during decryption: " + e.getMessage());
+                throw new RuntimeException("Got unexpected error during decryption: " + e);
             }
         }).collect(Collectors.toList());
     }
