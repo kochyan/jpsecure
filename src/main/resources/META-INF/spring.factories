@@ -1,2 +1,2 @@
 org.springframework.context.ApplicationListener=\
-ru.sstu.ifbs.listener.DecryptPropertiesListener
+ru.sstu.ifbs.decrypt.DecryptPropertiesListener
