@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static ru.sstu.ifbs.decrypt.util.DecryptConstants.DECRYPT_MARKER;
-import static ru.sstu.ifbs.decrypt.util.DecryptConstants.ISO_CHARSET;
+import static ru.sstu.ifbs.util.DecryptConstants.DECRYPT_MARKER;
+import static ru.sstu.ifbs.util.DecryptConstants.ISO_CHARSET;
 
 public class DefaultPropertyDecryptor extends DefaultDecryptor implements PropertyDecryptor {
     private String secretKey;
