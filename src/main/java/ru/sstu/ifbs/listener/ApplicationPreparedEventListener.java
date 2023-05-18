@@ -5,8 +5,8 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MutablePropertySources;
 import org.springframework.core.env.PropertySource;
-import ru.sstu.ifbs.decrypt.decryptors.PropertyDecryptor;
-import ru.sstu.ifbs.decrypt.decryptors.impl.DefaultPropertyDecryptor;
+import ru.sstu.ifbs.decrypt.PropertyDecryptor;
+import ru.sstu.ifbs.decrypt.impl.DefaultPropertyDecryptor;
 import ru.sstu.ifbs.propertyloader.PropertyLoader;
 
 import java.util.*;

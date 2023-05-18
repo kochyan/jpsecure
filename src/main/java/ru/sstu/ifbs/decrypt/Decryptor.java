@@ -1,4 +1,4 @@
-package ru.sstu.ifbs.decrypt.decryptors;
+package ru.sstu.ifbs.decrypt;
 
 import java.security.Key;
 

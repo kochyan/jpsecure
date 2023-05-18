@@ -1,7 +1,7 @@
 package ru.sstu.ifbs.example;
 
 import org.springframework.util.CollectionUtils;
-import ru.sstu.ifbs.decrypt.decryptors.PropertyDecryptor;
+import ru.sstu.ifbs.decrypt.PropertyDecryptor;
 
 import java.util.ArrayList;
 import java.util.Collections;

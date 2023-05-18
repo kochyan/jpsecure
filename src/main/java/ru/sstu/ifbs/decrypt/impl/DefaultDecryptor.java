@@ -1,6 +1,6 @@
-package ru.sstu.ifbs.decrypt.decryptors.impl;
+package ru.sstu.ifbs.decrypt.impl;
 
-import ru.sstu.ifbs.decrypt.decryptors.Decryptor;
+import ru.sstu.ifbs.decrypt.Decryptor;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;

@@ -1,4 +1,4 @@
-package ru.sstu.ifbs.decrypt.decryptors;
+package ru.sstu.ifbs.decrypt;
 
 import java.util.List;
 import java.util.Map;
@@ -8,3 +8,6 @@ public interface PropertyDecryptor {
 
     List<Map.Entry<String, String>> decryptProperties(List<Map.Entry<String, Object>> encryptedProperties);
 }
+
+
+
