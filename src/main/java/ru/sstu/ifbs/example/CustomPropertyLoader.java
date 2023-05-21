@@ -1,4 +1,4 @@
-package ru.sstu.ifbs.propertyloader.impl;
+package ru.sstu.ifbs.example;
 
 import org.springframework.core.env.PropertySource;
 import ru.sstu.ifbs.propertyloader.PropertyLoader;

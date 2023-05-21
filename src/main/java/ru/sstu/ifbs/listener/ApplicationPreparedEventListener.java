@@ -29,6 +29,9 @@ public class ApplicationPreparedEventListener implements ApplicationListener<App
         initLoaderAndLoadCustomProperties(event);
         ConfigurableEnvironment environment = event.getEnvironment();
         decryptorClassname = environment.getProperty(CUSTOM_DECRYPTOR_PROPERTY_NAME, "");
+        initKeyAndAlgorithm(environment);
+        initDecryptor();
+
         MutablePropertySources propertySources = environment.getPropertySources();
         propertySources.stream().forEach(propertySource -> {
             Optional<DecryptedPropertySource> decryptedSource = decryptPropertySource(propertySource);
@@ -45,7 +48,7 @@ public class ApplicationPreparedEventListener implements ApplicationListener<App
         try {
             propertyLoader = (PropertyLoader) Class.forName(loaderClassname).newInstance();
         } catch (Exception e) {
-            logger.warning("Error during creating custom decryptor: " + e);
+            logger.warning("Error during creating custom property loader: " + e);
             return;
         }
 
@@ -60,10 +63,6 @@ public class ApplicationPreparedEventListener implements ApplicationListener<App
         final Object source = propertySource.getSource();
         if (source instanceof Map) {
             final Map<String, Object> propertyMap = (Map<String, Object>) source;
-            if (sourceName.equals(HIGH_PRIORITY_SOURCE)) {
-                initKeyAndAlgorithm(propertyMap);
-                initDecryptor();
-            }
             final List<Map.Entry<String, Object>> encryptedProperties = findEncryptedProperties(propertyMap.entrySet());
             if (encryptedProperties.isEmpty()) {
                 return Optional.empty();
@@ -90,11 +89,13 @@ public class ApplicationPreparedEventListener implements ApplicationListener<App
                 .collect(Collectors.toList());
     }
 
-    private void initKeyAndAlgorithm(final Map<String, Object> properties) {
-        secretKey = properties.getOrDefault(DECRYPT_KEY_PROPERTY_NAME, "").toString();
-        algorithm = properties.getOrDefault(DECRYPT_ALGORITHM_PROPERTY_NAME, "").toString();
+    private void initKeyAndAlgorithm(final ConfigurableEnvironment environment) {
+        secretKey = environment.getProperty(DECRYPT_KEY_PROPERTY_NAME, "");
+        algorithm = environment.getProperty(DECRYPT_ALGORITHM_PROPERTY_NAME, "");
         if (isBlank(secretKey) || isBlank(algorithm)) {
-            throw new RuntimeException("Decryption key or algorithm is not specified");
+            if (isBlank(decryptorClassname)) {
+                throw new RuntimeException("Default decryptor implementation requires key and algorithm");
+            }
         }
     }
 
