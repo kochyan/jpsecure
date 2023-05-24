@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Set;
 
 public interface DecryptConstants {
+    String ENABLE_KEY="jpsecure.enabled";
     Set<String> IGNORED_SOURCES = Set.of("configurationProperties", "systemProperties", "random");
     String HIGH_PRIORITY_SOURCE = "systemEnvironment";
     String DECRYPT_KEY_PROPERTY_NAME = "decryptKey";

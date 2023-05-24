@@ -1,5 +1,7 @@
 package ru.sstu.ifbs.decrypt.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 import ru.sstu.ifbs.decrypt.PropertyDecryptor;
 
@@ -7,14 +9,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import static ru.sstu.ifbs.util.DecryptConstants.DECRYPT_MARKER;
 import static ru.sstu.ifbs.util.DecryptConstants.ISO_CHARSET;
 
 public class DefaultPropertyDecryptor extends DefaultDecryptor implements PropertyDecryptor {
-    private final static Logger logger = Logger.getLogger(DefaultDecryptor.class.getName());
+    private final static Logger logger = LoggerFactory.getLogger(DefaultDecryptor.class);
     private String secretKey;
     private String algorithm;
 
@@ -36,7 +37,7 @@ public class DefaultPropertyDecryptor extends DefaultDecryptor implements Proper
             final byte[] decryptedProperty = decrypt(encryptedProperty, algorithm, secretKey.getBytes(ISO_CHARSET));
             return Map.entry(encryptedPropertyEntry.getKey(), new String(decryptedProperty, ISO_CHARSET));
         } catch (Exception e) {
-            logger.warning("Got error during decrypting an encrypted property ");
+            logger.debug("Got error during decrypting an encrypted property ");
             return Map.entry(encryptedPropertyEntry.getKey(), encryptedPropertyEntry.getValue().toString());
         }
     }
