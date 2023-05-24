@@ -1,7 +1,5 @@
 package ru.sstu.ifbs.listener;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -12,6 +10,7 @@ import ru.sstu.ifbs.decrypt.impl.DefaultPropertyDecryptor;
 import ru.sstu.ifbs.propertyloader.PropertyLoader;
 
 import java.util.*;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import static org.apache.logging.log4j.util.Strings.isBlank;
@@ -19,7 +18,7 @@ import static org.apache.logging.log4j.util.Strings.isNotBlank;
 import static ru.sstu.ifbs.util.DecryptConstants.*;
 
 public class ApplicationPreparedEventListener implements ApplicationListener<ApplicationEnvironmentPreparedEvent> {
-    private static final Logger logger = LoggerFactory.getLogger(ApplicationPreparedEventListener.class);
+    private static final Logger logger = java.util.logging.Logger.getLogger(ApplicationPreparedEventListener.class.getName());
     private String secretKey = null;
     private String algorithm = null;
     private String decryptorClassname = null;
@@ -27,7 +26,10 @@ public class ApplicationPreparedEventListener implements ApplicationListener<App
 
     @Override
     public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
-
+        if (event.getEnvironment().getProperty(ENABLE_KEY).equals("false")) {
+            logger.warning("Decrypting is disabled...");
+            return;
+        }
         initLoaderAndLoadCustomProperties(event);
         ConfigurableEnvironment environment = event.getEnvironment();
         decryptorClassname = environment.getProperty(CUSTOM_DECRYPTOR_PROPERTY_NAME, "");
@@ -50,7 +52,7 @@ public class ApplicationPreparedEventListener implements ApplicationListener<App
         try {
             propertyLoader = (PropertyLoader) Class.forName(loaderClassname).newInstance();
         } catch (Exception e) {
-            logger.debug("Error during creating custom property loader: " + e);
+            logger.warning("Error during creating custom property loader: " + e);
             return;
         }
 
@@ -73,7 +75,7 @@ public class ApplicationPreparedEventListener implements ApplicationListener<App
             final Map<String, Object> decryptedMap = mergeDecryptedProperties(decryptedProperties, propertyMap);
             return Optional.of(new DecryptedPropertySource(sourceName, decryptedMap));
         } else {
-            logger.warn("Unsupported property source: " + source.getClass().getName());
+            logger.warning("Unsupported property source: " + source.getClass().getName());
             return Optional.empty();
         }
     }
@@ -119,14 +121,14 @@ public class ApplicationPreparedEventListener implements ApplicationListener<App
                     .getDeclaredConstructor(String.class, String.class)
                     .newInstance(secretKey, algorithm);
         } catch (Exception e) {
-            logger.debug("Can`t create new instance using constructor (String key, String algorithm), error: " + e.getMessage());
+            logger.warning("Can`t create new instance using constructor (String key, String algorithm), error: " + e.getMessage());
         }
         try {
             return (PropertyDecryptor) Class.forName(decryptorClassname)
                     .getDeclaredConstructor()
                     .newInstance();
         } catch (Exception e) {
-            logger.debug("Can`t create new instance using empty constructor, error: " + e.getMessage());
+            logger.warning("Can`t create new instance using empty constructor, error: " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
